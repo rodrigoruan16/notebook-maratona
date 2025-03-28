@@ -2,40 +2,40 @@
  
 using namespace std;
 
-// BFS COM PREVIOUS DO LABYRINTH CSES
+vector<vector<int>> G;
+vector<int> visited;
+vector<int> teams;
 
-vector<vector<char>> G;
-vector<vector<int>> visited;
-vector<pair<int, int>> moves = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-vector<vector<pair<int, int>>> previous;
+int bfs(int i) {
+    queue<int> q;
+    q.push(i);
 
-void bfs(int i, int j) {
-    queue<pair<int, int>> q;
-    q.push({i, j});
+    teams[i] = 1;
 
     while (!q.empty()) {
-        pair<int, int> p = q.front();
+        int c = q.front();
         q.pop();
 
-        if (visited[p.first][p.second])
+        if (visited[c])
             continue;
 
-        if (G[p.first][p.second] == 'B') {
-            return;
-        }
+        visited[c] = 1;
 
-        visited[p.first][p.second] = 1;
-
-        for (pair<int, int> pp : moves) {
-            int I = p.first + pp.first, J = p.second + pp.second;
-
-            if (I < 0 || J < 0 || I >= G.size() || J >= G[0].size() || visited[I][J] || G[I][J] == '#')
+        for (int p : G[c]) {
+            if (visited[p])
                 continue;
 
-            previous[I][J] = {p.first, p.second};
-            q.push({I, J});
-        }
+            if (teams[p] == teams[c]) {
+                cout << "IMPOSSIBLE" << "\n";
+                return 0;
+            }
+
+            teams[p] = (teams[c] == 1 ? 2 : 1);
+            q.push(p);
+        }      
     }
+
+    return 1;
 }
 
 int main() {
@@ -45,62 +45,28 @@ int main() {
     int n, m;
     cin >> n >> m;
 
-    G = vector<vector<char>>(n, vector<char>(m));
-    visited = vector<vector<int>>(n, vector<int>(m, 0));
-    previous = vector<vector<pair<int, int>>>(n, vector<pair<int, int>>(m));
+    G = vector<vector<int>>(n + 1, vector<int>());
+    teams = vector<int>(n + 1, 0);
+    visited = vector<int>(n + 1, 0);
 
-    int beginI = 0, beginJ = 0, finalI = 0, finalJ = 0;
-
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            cin >> G[i][j];
-            if (G[i][j] == 'A') {
-                beginI = i;
-                beginJ = j;
-            }
-
-            if (G[i][j] == 'B') {
-                finalI = i;
-                finalJ = j;
-            }
-        }
+    int a, b;
+    for (int i = 0; i < m; i++) {
+        cin >> a >> b;
+        G[a].push_back(b);
+        G[b].push_back(a);
     }
 
-    previous[finalI][finalJ] = {INT_MIN, INT_MAX};
+    for (int i = 1; i <= n; i++) {
+        if (teams[i] != 0)
+            continue;
 
-    bfs(beginI, beginJ);
-
-    if (previous[finalI][finalJ].first == INT_MIN && previous[finalI][finalJ].second == INT_MAX) {
-        cout << "NO" << "\n";
-        return 0;
+        if (!bfs(i))
+            return 0;
     }
 
-    cout << "YES\n";
-
-    stack<char> ans;
-
-    while (finalI != beginI || finalJ != beginJ) {
-        pair<int, int> &pre = previous[finalI][finalJ];
-
-        if (finalI < pre.first)
-            ans.push('U');
-        else if (finalI > pre.first)
-            ans.push('D');
-        else if (finalJ < pre.second)
-            ans.push('L');
-        else
-            ans.push('R');
-
-        finalI = pre.first;
-        finalJ = pre.second;
-    }
-
-    cout << ans.size() << '\n';
-
-    while (!ans.empty()) {
-        cout << ans.top();
-        ans.pop();
-    }
+    for (int i = 1; i <= n; i++)
+        cout << teams[i] << ' ';
+    cout << '\n';
 
     return 0;
 }
