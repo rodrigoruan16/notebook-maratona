@@ -19,12 +19,3 @@ int binarySeach(vector<int> &arr, int val) {
 
     return -1; // elemento nao encontrado
 }
-
-int main() {
-   ios_base::sync_with_stdio(false);
-   cin.tie(0);
-
-
-  
-   return 0;
-}
