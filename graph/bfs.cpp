@@ -4,68 +4,75 @@ using namespace std;
 
 vector<vector<int>> G;
 vector<int> visited;
-vector<int> teams;
+vector<int> pred;
 
-int bfs(int i) {
+// BFS COM PREDECESSOR LISTA ADJ
+
+void bfs(int i) {
     queue<int> q;
     q.push(i);
 
-    teams[i] = 1;
-
     while (!q.empty()) {
-        int c = q.front();
+        int a = q.front();
         q.pop();
 
-        if (visited[c])
+        if (visited[a])
             continue;
 
-        visited[c] = 1;
+        visited[a] = 1;
 
-        for (int p : G[c]) {
-            if (visited[p])
-                continue;
-
-            if (teams[p] == teams[c]) {
-                cout << "IMPOSSIBLE" << "\n";
-                return 0;
+        for (int p : G[a]) {
+            if (!visited[p]) {
+                q.push(p);
+                if (pred[p] == -1)
+                    pred[p] = a;
             }
-
-            teams[p] = (teams[c] == 1 ? 2 : 1);
-            q.push(p);
-        }      
+        }
     }
-
-    return 1;
 }
 
 int main() {
     ios::sync_with_stdio(0);
     cin.tie(0);
+    cout << fixed << setprecision(0);
 
     int n, m;
     cin >> n >> m;
 
     G = vector<vector<int>>(n + 1, vector<int>());
-    teams = vector<int>(n + 1, 0);
     visited = vector<int>(n + 1, 0);
+    pred = vector<int> (n + 1, -1);
 
-    int a, b;
+    int u, v;
     for (int i = 0; i < m; i++) {
-        cin >> a >> b;
-        G[a].push_back(b);
-        G[b].push_back(a);
+        cin >> u >> v;
+        G[u].push_back(v);
+        G[v].push_back(u);
     }
 
-    for (int i = 1; i <= n; i++) {
-        if (teams[i] != 0)
-            continue;
+    bfs(1);
 
-        if (!bfs(i))
-            return 0;
+    if (!visited[n]) {
+        cout << "IMPOSSIBLE\n";
+        return 0;
     }
 
-    for (int i = 1; i <= n; i++)
-        cout << teams[i] << ' ';
+    int p = pred[n];
+    stack<int> s;
+    s.push(n);
+
+    while (p != -1) {
+        s.push(p);
+        p = pred[p];
+    }
+
+    cout << s.size() << '\n';
+
+    while (!s.empty()) {
+        cout << s.top() << ' ';
+        s.pop();
+    }
+
     cout << '\n';
 
     return 0;

@@ -2,7 +2,7 @@
  
 using namespace std;
 
-// BFS COM PREVIOUS DO LABYRINTH CSES
+// BFS COM PRED - LABYRINTH CSES
 
 vector<vector<char>> G;
 vector<vector<int>> visited;

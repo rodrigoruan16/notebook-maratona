@@ -30,7 +30,7 @@ int main() {
     cin >> n >> m;
 
     G = vector<vector<char>>(n, vector<char>(m));
-    visited =vector<vector<int>>(n, vector<int>(m, 0));
+    visited = vector<vector<int>>(n, vector<int>(m, 0));
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
