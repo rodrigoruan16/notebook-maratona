@@ -38,9 +38,9 @@ int main() {
     int n, m;
     cin >> n >> m;
 
-    G = vector<vector<pair<int, int>>> (n + 2, vector<pair<int ,int>>());
-    visited = vector<int> (n + 2, 0);
-    dist = vector<int> (n + 2, INFINITY);
+    G = vector<vector<pair<int, int>>> (n + 1, vector<pair<int ,int>>());
+    visited = vector<int> (n + 1, 0);
+    dist = vector<int> (n + 1, INFINITY);
 
     int s, t, b;
     while (m--) {
