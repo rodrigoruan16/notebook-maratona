@@ -46,7 +46,7 @@ int main() {
     while (m--) {
         cin >> s >> t >> b;
         G[s].push_back({t, b});
-        G[t].push_back({s, b});
+        //G[t].push_back({s, b});
     }
 
     dijkstra(0);
