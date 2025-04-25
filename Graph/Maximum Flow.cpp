@@ -1,3 +1,5 @@
+//The max flow problem is a classic optimization problem in graph theory that involves finding the maximum amount of flow that can be sent through a network of pipes, channels, or other pathways, subject to capacity constraints. The problem can be used to model a wide variety of real-world situations, such as transportation systems, communication networks, and resource allocation.
+
 #include <bits/stdc++.h>
  
 using namespace std;
